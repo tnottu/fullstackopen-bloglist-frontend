@@ -38,4 +38,21 @@ describe('<Blog />', () => {
     expect(component.container.querySelector('.blog-details-likes-count')).toHaveTextContent('7')
     expect(component.container).toHaveTextContent('https://en.wikipedia.org/wiki/Excession')
   })
+
+  test('multiple like-button clicks call event handler same amount', () => {
+    const mockHandler = jest.fn()
+
+    component = render(
+      <Blog blog={blog} updateBlog={mockHandler} />
+    )
+
+    const viewButton = component.container.querySelector('.blog-details-toggle')
+    fireEvent.click(viewButton)
+
+    const likeButton = component.getByText('Like')
+    fireEvent.click(likeButton)
+    fireEvent.click(likeButton)
+
+    expect(mockHandler.mock.calls).toHaveLength(2)
+  })
 })
