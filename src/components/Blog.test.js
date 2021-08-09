@@ -1,6 +1,6 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
-import { render } from '@testing-library/react'
+import { render, fireEvent } from '@testing-library/react'
 import Blog from './Blog'
 
 describe('<Blog />', () => {
@@ -30,5 +30,12 @@ describe('<Blog />', () => {
   test('at start does not render url or likes', () => {
     expect(component.container.querySelector('.blog-details-likes-count')).toBeNull()
     expect(component.container).not.toHaveTextContent('https://en.wikipedia.org/wiki/Excession')
+  })
+
+  test('after clicking the button, render url and likes', () => {
+    const viewButton = component.container.querySelector('.blog-details-toggle')
+    fireEvent.click(viewButton)
+    expect(component.container.querySelector('.blog-details-likes-count')).toHaveTextContent('7')
+    expect(component.container).toHaveTextContent('https://en.wikipedia.org/wiki/Excession')
   })
 })

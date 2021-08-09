@@ -29,7 +29,7 @@ const Blog = ({ blog, updateBlog, removeBlog, user }) => {
     <div style={blogStyle}>
       <div>
         {blog.title} {blog.author}
-        <button onClick={() => setVisible(!visible)}>{toggleButtonText}</button>
+        <button className="blog-details-toggle" onClick={() => setVisible(!visible)}>{toggleButtonText}</button>
         {visible &&
           <div className="blog-details">
             {blog.url}<br />
