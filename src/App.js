@@ -72,6 +72,15 @@ const App = () => {
     }, 5000)
   }
 
+  const updateBlog = async (updatedBlog) => {
+    const returnedBlog = await blogService.update(updatedBlog)
+    setBlogs(blogs.map(blog => blog.id === returnedBlog.id ? returnedBlog : blog))
+    setNotificationMessage({ text: `Existing blog ${returnedBlog.title} by ${returnedBlog.author} updated`})
+    setTimeout(() => {
+      setNotificationMessage(null)
+    }, 5000)
+  }
+
   const loginForm = () => (
     <form onSubmit={handleLogin}>
       <div>
@@ -118,7 +127,7 @@ const App = () => {
             <p>{user.name} logged in <button onClick={handleLogout}>Logout</button></p>
             {createBlogForm()}
             {blogs.map(blog =>
-              <Blog key={blog.id} blog={blog} />
+              <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
             )}
           </div>
         }
