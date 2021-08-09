@@ -12,10 +12,6 @@ const Blog = ({ blog, updateBlog, removeBlog, user }) => {
     marginBottom: 5
   }
 
-  const detailsStyle = {
-    display: visible ? 'block' : 'none',
-  }
-
   const handleLike = () => {
     const updatedBlog = Object.assign({}, blog, {
       likes: blog.likes + 1,
@@ -34,12 +30,14 @@ const Blog = ({ blog, updateBlog, removeBlog, user }) => {
       <div>
         {blog.title} {blog.author}
         <button onClick={() => setVisible(!visible)}>{toggleButtonText}</button>
-        <div style={detailsStyle}>
-          {blog.url}<br />
-          {blog.likes} <button onClick={handleLike}>Like</button><br />
-          {blog.user.name}<br />
-          {blog.user.username === user.username && <button onClick={handleRemove}>remove</button>}
-        </div>
+        {visible &&
+          <div className="blog-details">
+            {blog.url}<br />
+            <span className="blog-details-likes-count">{blog.likes}</span> <button onClick={handleLike}>Like</button><br />
+            {blog.user.name}<br />
+            {(user && user.username === blog.user.username) && <button onClick={handleRemove}>remove</button>}
+          </div>
+        }
       </div>
     </div>
   )
