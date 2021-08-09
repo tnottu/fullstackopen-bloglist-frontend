@@ -82,6 +82,15 @@ const App = () => {
     }, 5000)
   }
 
+  const removeBlog = async (blogToRemove) => {
+    await blogService.remove(blogToRemove)
+    setBlogs(blogs.filter(blog => blog.id !== blogToRemove.id))
+    setNotificationMessage({ text: `Blog ${blogToRemove.title} by ${blogToRemove.author} deleted`})
+    setTimeout(() => {
+      setNotificationMessage(null)
+    }, 5000)
+  }
+
   const loginForm = () => (
     <form onSubmit={handleLogin}>
       <div>
@@ -128,7 +137,7 @@ const App = () => {
             <p>{user.name} logged in <button onClick={handleLogout}>Logout</button></p>
             {createBlogForm()}
             {blogsSorted.map(blog =>
-              <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
+              <Blog key={blog.id} blog={blog} updateBlog={updateBlog} removeBlog={removeBlog} user={user} />
             )}
           </div>
         }
