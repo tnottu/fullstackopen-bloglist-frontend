@@ -14,6 +14,7 @@ const App = () => {
   const LOGIN_DETAILS_STORAGE_KEY = 'loggedBloglistappUser'
   const [notificationMessage, setNotificationMessage] = useState(null)
   const blogFormRef = useRef()
+  const blogsSorted = [...blogs].sort((a, b) => (a.likes > b.likes) ? -1 : 1)
 
   useEffect(() => {
     (async () => {
@@ -126,7 +127,7 @@ const App = () => {
             <h2>blogs</h2>
             <p>{user.name} logged in <button onClick={handleLogout}>Logout</button></p>
             {createBlogForm()}
-            {blogs.map(blog =>
+            {blogsSorted.map(blog =>
               <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
             )}
           </div>
