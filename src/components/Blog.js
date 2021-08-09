@@ -16,6 +16,13 @@ const Blog = ({blog, updateBlog}) => {
     display: visible ? 'block' : 'none',
   }
 
+  const handleLike = () => {
+    const updatedBlog = Object.assign({}, blog, {
+      likes: blog.likes + 1,
+    })
+    updateBlog(updatedBlog)
+  }
+
   return (
     <div style={blogStyle}>
       <div>
@@ -23,7 +30,7 @@ const Blog = ({blog, updateBlog}) => {
         <button onClick={() => setVisible(!visible)}>{toggleButtonText}</button>
         <div style={detailsStyle}>
           {blog.url}<br />
-          {blog.likes} <button disabled>Like</button><br />
+          {blog.likes} <button onClick={handleLike}>Like</button><br />
           {blog.user.name}
         </div>
       </div>
