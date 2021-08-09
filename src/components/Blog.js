@@ -1,6 +1,6 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 
-const Blog = ({blog, updateBlog, removeBlog, user}) => {
+const Blog = ({ blog, updateBlog, removeBlog, user }) => {
   const [visible, setVisible] = useState(false)
   const toggleButtonText = visible ? 'hide' : 'view'
 

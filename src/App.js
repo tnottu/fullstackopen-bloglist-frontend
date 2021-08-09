@@ -49,7 +49,7 @@ const App = () => {
       blogService.setToken(user.token)
     } catch (exception) {
       console.error('Wrong credentials')
-      setNotificationMessage({ text: 'Wrong username or password', type: 'error'})
+      setNotificationMessage({ text: 'Wrong username or password', type: 'error' })
       setTimeout(() => {
         setNotificationMessage(null)
       }, 5000)
@@ -67,7 +67,7 @@ const App = () => {
     blogFormRef.current.toggleVisibility()
     const returnedBlog = await blogService.create(newBlog)
     setBlogs(blogs.concat(returnedBlog))
-    setNotificationMessage({ text: `A new blog ${returnedBlog.title} by ${returnedBlog.author} added`})
+    setNotificationMessage({ text: `A new blog ${returnedBlog.title} by ${returnedBlog.author} added` })
     setTimeout(() => {
       setNotificationMessage(null)
     }, 5000)
@@ -76,7 +76,7 @@ const App = () => {
   const updateBlog = async (updatedBlog) => {
     const returnedBlog = await blogService.update(updatedBlog)
     setBlogs(blogs.map(blog => blog.id === returnedBlog.id ? returnedBlog : blog))
-    setNotificationMessage({ text: `Existing blog ${returnedBlog.title} by ${returnedBlog.author} updated`})
+    setNotificationMessage({ text: `Existing blog ${returnedBlog.title} by ${returnedBlog.author} updated` })
     setTimeout(() => {
       setNotificationMessage(null)
     }, 5000)
@@ -85,7 +85,7 @@ const App = () => {
   const removeBlog = async (blogToRemove) => {
     await blogService.remove(blogToRemove)
     setBlogs(blogs.filter(blog => blog.id !== blogToRemove.id))
-    setNotificationMessage({ text: `Blog ${blogToRemove.title} by ${blogToRemove.author} deleted`})
+    setNotificationMessage({ text: `Blog ${blogToRemove.title} by ${blogToRemove.author} deleted` })
     setTimeout(() => {
       setNotificationMessage(null)
     }, 5000)
@@ -95,7 +95,7 @@ const App = () => {
     <form onSubmit={handleLogin}>
       <div>
         username
-          <input
+        <input
           type="text"
           value={username}
           name="Username"
@@ -104,7 +104,7 @@ const App = () => {
       </div>
       <div>
         password
-          <input
+        <input
           type="password"
           value={password}
           name="Password"
@@ -128,19 +128,19 @@ const App = () => {
       {user === null
 
         ? <div>
-            <h2>Log in to application</h2>
-            {loginForm()}
-          </div>
+          <h2>Log in to application</h2>
+          {loginForm()}
+        </div>
 
         : <div>
-            <h2>blogs</h2>
-            <p>{user.name} logged in <button onClick={handleLogout}>Logout</button></p>
-            {createBlogForm()}
-            {blogsSorted.map(blog =>
-              <Blog key={blog.id} blog={blog} updateBlog={updateBlog} removeBlog={removeBlog} user={user} />
-            )}
-          </div>
-        }
+          <h2>blogs</h2>
+          <p>{user.name} logged in <button onClick={handleLogout}>Logout</button></p>
+          {createBlogForm()}
+          {blogsSorted.map(blog =>
+            <Blog key={blog.id} blog={blog} updateBlog={updateBlog} removeBlog={removeBlog} user={user} />
+          )}
+        </div>
+      }
     </>
   )
 }
