@@ -76,6 +76,33 @@ describe('Blog app', function() {
       cy.get('@theBlog').contains('Like').click()
       cy.get('@theBlog').find('.blog-details-likes-count').contains('1')
     })
+
+    it('User can delete own blog', function() {
+      cy.createBlog(testBlog)
+      cy.contains(testBlog.title).as('theBlog').parent()
+      cy.get('@theBlog').contains('view').click()
+      cy.get('@theBlog').contains('remove').click()
+      cy.wait(500)
+      cy.get('.blog').should('not.exist')
+    })
+
+    it('User can not delete another user\'s blog', function() {
+      cy.createBlog(testBlog)
+
+      cy.contains('Logout').click()
+
+      const user2 = {
+        name: 'Matt Damon',
+        username: 'mattdamon',
+        password: 'secret'
+      }
+      cy.request('POST', 'http://localhost:3003/api/users/', user2)
+      cy.login(user2)
+
+      cy.contains(testBlog.title).as('theBlog').parent()
+      cy.get('@theBlog').contains('view').click()
+      cy.contains('remove').should('not.exist')
+    })
   })
 
 })
