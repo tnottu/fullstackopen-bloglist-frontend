@@ -1,4 +1,11 @@
 describe('Blog app', function() {
+
+  const testBlog = {
+    title: 'A blog to like',
+    author: 'Cybressbot',
+    url: 'https://cypresshill.com',
+  }
+
   beforeEach(function() {
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
     const user = {
@@ -51,14 +58,23 @@ describe('Blog app', function() {
     it('A blog can be created', function() {
       cy.contains('create new blog').click()
 
-      cy.get('input[name="title"]').type('A note by Cypress')
-      cy.get('input[name="author"]').type('Cypressbot')
-      cy.get('input[name="url"]').type('https://cypresshill.com')
+      cy.get('input[name="title"]').type(testBlog.title)
+      cy.get('input[name="author"]').type(testBlog.author)
+      cy.get('input[name="url"]').type(testBlog.url)
 
       cy.get('.blog-form button').contains('create').click()
 
-      cy.contains('A note by Cypress')
-      cy.contains('Cypressbot')
+      cy.contains(testBlog.title)
+      cy.contains(testBlog.author)
+    })
+
+    it('User can like a blog', function() {
+      cy.createBlog(testBlog)
+      cy.contains(testBlog.title).as('theBlog').parent()
+      cy.get('@theBlog').contains('view').click()
+      cy.get('@theBlog').find('.blog-details-likes-count').contains('0')
+      cy.get('@theBlog').contains('Like').click()
+      cy.get('@theBlog').find('.blog-details-likes-count').contains('1')
     })
   })
 
