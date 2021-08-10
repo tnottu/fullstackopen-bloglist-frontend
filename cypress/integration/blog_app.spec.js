@@ -70,7 +70,7 @@ describe('Blog app', function() {
 
     it('User can like a blog', function() {
       cy.createBlog(testBlog)
-      cy.contains(testBlog.title).as('theBlog').parent()
+      cy.contains(testBlog.title).parent().as('theBlog')
       cy.get('@theBlog').contains('view').click()
       cy.get('@theBlog').find('.blog-details-likes-count').contains('0')
       cy.get('@theBlog').contains('Like').click()
@@ -79,7 +79,7 @@ describe('Blog app', function() {
 
     it('User can delete own blog', function() {
       cy.createBlog(testBlog)
-      cy.contains(testBlog.title).as('theBlog').parent()
+      cy.contains(testBlog.title).parent().as('theBlog')
       cy.get('@theBlog').contains('view').click()
       cy.get('@theBlog').contains('remove').click()
       cy.wait(500)
@@ -99,11 +99,64 @@ describe('Blog app', function() {
       cy.request('POST', 'http://localhost:3003/api/users/', user2)
       cy.login(user2)
 
-      cy.contains(testBlog.title).as('theBlog').parent()
+      cy.contains(testBlog.title).parent().as('theBlog')
       cy.get('@theBlog').contains('view').click()
       cy.contains('remove').should('not.exist')
+    })
+
+    it('Blogs are ordered according to likes, most likes first', function() {
+
+      const testBlog1 = {
+        title: 'Middle likes',
+        author: 'Teppo Testaaja',
+        url: 'https://example.com',
+      }
+
+      const testBlog2 = {
+        title: 'Most likes',
+        author: 'Tiina Testaaja',
+        url: 'https://example.com',
+      }
+
+      const testBlog3 = {
+        title: 'Least likes',
+        author: 'Taavi Testaaja',
+        url: 'https://example.com',
+      }
+
+      cy.createBlog(testBlog1)
+      cy.createBlog(testBlog2)
+      cy.createBlog(testBlog3)
+
+
+      cy.contains(testBlog1.title).parent().as('theBlog1')
+      cy.contains(testBlog2.title).parent().as('theBlog2')
+      cy.contains(testBlog3.title).parent().as('theBlog3')
+
+      cy.get('@theBlog1').contains('view').click()
+      cy.get('@theBlog1').contains('Like')
+        .click()
+        .wait(100)
+        .click()
+        .wait(100)
+
+      cy.get('@theBlog2').contains('view').click()
+      cy.get('@theBlog2').contains('Like')
+        .click()
+        .wait(100)
+        .click()
+        .wait(100)
+        .click()
+        .wait(100)
+
+      cy.get('@theBlog3').contains('view').click()
+
+      cy.get('.blog-title').then(function($els) {
+        return Cypress.$.makeArray($els).map((el) => el.innerText)
+      })
+        .should('deep.equal', [testBlog2.title, testBlog1.title, testBlog3.title])
+
     })
   })
 
 })
-
